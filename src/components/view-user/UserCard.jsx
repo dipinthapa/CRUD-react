@@ -1,64 +1,76 @@
-import { HiMail, HiPhone, HiGlobe, HiLocationMarker, HiBriefcase } from "react-icons/hi";
+import {
+  HiMail,
+  HiPhone,
+  HiGlobe,
+  HiLocationMarker,
+  HiBriefcase,
+} from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
- 
 export default function UserCard(props) {
-
+  const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 w-full max-w-sm">
- 
-        {/* Header */}
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-12 h-12 rounded-full bg-[linear-gradient(45deg,#685EFF,#AA48FF)] flex items-center justify-center font-semibold text-white text-lg shrink-0">
-            L
+    <section className="">
+      <div className=" bg-gray-100 flex items-center justify-center p-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 w-full max-w-sm">
+          {/* Header */}
+          <div className="flex items-center gap-3 mb-5">
+            <div className="w-12 h-12 rounded-full bg-[linear-gradient(45deg,#685EFF,#AA48FF)] flex items-center justify-center font-semibold text-white text-lg shrink-0">
+              {props.id}
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-gray-900">
+                {props.name}
+              </p>
+              <p className="text-sm text-gray-400">@{props.username}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-semibold text-gray-900">{props.name}</p>
-            <p className="text-sm text-gray-400">@{props.username}</p>
+
+          {/* Contact Info */}
+          <div className=" pt-4 flex flex-col gap-3">
+            <div className="flex items-center gap-3">
+              <HiMail className="text-gray-400 shrink-0 text-base" />
+              <span className="text-sm text-gray-700">{props.email}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <HiPhone className="text-gray-400 shrink-0 text-base" />
+              <span className="text-sm text-gray-700">{props.tel}</span>
+            </div>
+            <div className="flex items-center gap-3">
+              <HiGlobe className="text-gray-400 shrink-0 text-base" />
+              <span className="text-sm text-gray-700">{props.website}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <HiLocationMarker className="text-gray-400 shrink-0 text-base mt-0.5" />
+              <span className="text-sm text-gray-700 leading-relaxed">
+                {props.street}, {props.suite}, {props.city}
+              </span>
+            </div>
+          </div>
+
+          {/* Company */}
+          <div className="border-t border-gray-100 mt-4 pt-4 flex items-center gap-3">
+            <HiBriefcase className="text-gray-400 shrink-0 text-base" />
+            <div>
+              <p className="text-sm font-medium text-gray-800">
+                {props.company}
+              </p>
+              <p className="text-xs text-gray-400">{props.post}</p>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-3 mt-5">
+            <button
+              onClick={() => navigate("/")}
+              className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors"
+            >
+              View
+            </button>
           </div>
         </div>
- 
-        {/* Contact Info */}
-        <div className=" pt-4 flex flex-col gap-3">
-          <div className="flex items-center gap-3">
-            <HiMail className="text-gray-400 shrink-0 text-base" />
-            <span className="text-sm text-gray-700">{props.email}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <HiPhone className="text-gray-400 shrink-0 text-base" />
-            <span className="text-sm text-gray-700">{props.tel}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <HiGlobe className="text-gray-400 shrink-0 text-base" />
-            <span className="text-sm text-gray-700">{props.website}</span>
-          </div>
-          <div className="flex items-start gap-3">
-            <HiLocationMarker className="text-gray-400 shrink-0 text-base mt-0.5" />
-            <span className="text-sm text-gray-700 leading-relaxed">
-              {props.street},  {props.suite}, {props.city}
-            </span>
-          </div>
-        </div>
- 
-        {/* Company */}
-        <div className="border-t border-gray-100 mt-4 pt-4 flex items-center gap-3">
-          <HiBriefcase className="text-gray-400 shrink-0 text-base" />
-          <div>
-            <p className="text-sm font-medium text-gray-800">{props.company}</p>
-            <p className="text-xs text-gray-400">{props.post}</p>
-          </div>
-        </div>
- 
-        {/* Actions */}
-        <div className="flex gap-3 mt-5">
-          <button className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors">
-            View
-          </button>
-          
-        </div>
- 
       </div>
-    </div>
+    </section>
   );
 }
