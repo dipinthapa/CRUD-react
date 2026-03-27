@@ -7,10 +7,13 @@ import {
 } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 
+
 export default function UserCard(props) {
   const navigate = useNavigate();
 
   return (
+    <>
+    
     <section className="">
       <div className=" bg-gray-100 flex items-center justify-center p-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5 w-full max-w-sm">
@@ -44,7 +47,9 @@ export default function UserCard(props) {
             <div className="flex items-start gap-3">
               <HiLocationMarker className="text-gray-400 shrink-0 text-base mt-0.5" />
               <span className="text-sm text-gray-700 leading-relaxed">
-                {props.street}, {props.suite}, {props.city}
+                {props.street}, {props.suite}, 
+                <span className="block">{props.city} </span>
+                
               </span>
             </div>
           </div>
@@ -72,5 +77,8 @@ export default function UserCard(props) {
         </div>
       </div>
     </section>
+    
+    </>
+    
   );
 }

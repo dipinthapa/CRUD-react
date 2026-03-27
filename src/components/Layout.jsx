@@ -4,7 +4,7 @@ import Home from './landingPage/Home'
 
 const Layout = () => {
   return (
-    <div className='grid grid-cols-[0.2fr_1fr]'>
+    <div className='grid grid-cols-[0.2fr_1fr] '>
       <Home />
       <Outlet />
     </div>

@@ -1,19 +1,16 @@
-import { getPosts } from "../../api/api";
-import { useEffect } from "react";
-import { useState } from "react";
 import UserCard from "./UserCard";
+import { useContext } from "react";
+import { UserContext } from "../../context/globalcontext";
 
 export default function View() {
-  const [data, setData] = useState(null);
 
-  useEffect(() => {
-    getPosts().then((posts) => setData(posts));
-  }, []);
+const  {users}= useContext(UserContext)
+
 
   return (
-    <div>
-      {data ? (
-        data.map((e) => (
+    <div className="grid grid-cols-2 lg:grid-cols-3 ">
+      {users ? (
+        users.map((e) => (
           <UserCard
             key={e.id}
             id={e.id}

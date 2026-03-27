@@ -1,6 +1,4 @@
-import React from 'react'
-import User from '../create-user/User'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
 
