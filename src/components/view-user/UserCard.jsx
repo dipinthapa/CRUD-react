@@ -71,7 +71,13 @@ export default function UserCard(props) {
               onClick={() => navigate("/")}
               className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors"
             >
-              View
+              Edit
+            </button>
+            <button
+              onClick={() => navigate("/")}
+              className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-xl transition-colors"
+            >
+              Delete
             </button>
           </div>
         </div>

@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import LocalUsers from "../view-user/LocalUsers";
 import { useContext } from "react";
 import { UserContext } from "../../context/globalcontext";
+import { useState } from "react";
 
 /* -------------------- ZOD SCHEMA -------------------- */
 const schema = z.object({
@@ -58,6 +58,7 @@ const SectionLabel = ({ children }) => (
 export default function User() {
 
 const  {users,setUsers}= useContext(UserContext)
+const [editIndex, setEditIndex] = useState(null);
   const {
     register,
     handleSubmit,
@@ -92,11 +93,50 @@ const  {users,setUsers}= useContext(UserContext)
       bs: data.bs,
     },
   };
+  if (editIndex !== null) {
+    // UPDATE
+    const updated = [...users];
+    updated[editIndex] = newData;
+    setUsers(updated);
+    setEditIndex(null);
+  } else {
+    // CREATE
+    setUsers((prev) => [...prev, newData]);
+    console.log(newData)
+  }
 
-  setUsers((prev) => [...prev, newData]);
-  console.log(newData)
+  
   reset();
 };
+
+// edit 
+const handleEdit = (index) => {
+  const user = user[index];
+
+  reset({
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    phone: user.phone,
+    website: user.website,
+
+    street: user.address.street,
+    suite: user.address.suite,
+    city: user.address.city,
+    zipcode: user.address.zipcode,
+
+    lat: user.address.geo.lat,
+    lng: user.address.geo.lng,
+
+    companyName: user.company.name,
+    catchPhrase: user.company.catchPhrase,
+    bs: user.company.bs,
+  });
+
+  setEditIndex(index);
+};
+
+
 
   return (
     <>
@@ -226,7 +266,7 @@ const  {users,setUsers}= useContext(UserContext)
         </form>
       </div>
     </div>
-    <LocalUsers users={users}/>
+
     </>
   );
 }
