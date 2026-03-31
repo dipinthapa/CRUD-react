@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../../context/globalcontext";
-import { useState } from "react";
+
 
 /* -------------------- ZOD SCHEMA -------------------- */
 const schema = z.object({
@@ -21,7 +21,7 @@ const schema = z.object({
   .min(6, "At least 6 characters")
   .regex(/[A-Z]/, "Must include 1 uppercase letter")
   .regex(/[0-9]/, "Must include 1 number"),
-  phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits"),
+  phone: z.string().min(10, "Phone must be 10 digits"),
   website: z.string().optional(),
   street: z.string().min(2, "Street is required"),
   suite: z.string().optional(),
@@ -57,8 +57,13 @@ const SectionLabel = ({ children }) => (
 /* -------------------- MAIN COMPONENT -------------------- */
 export default function User() {
 
-const  {users,setUsers}= useContext(UserContext)
-const [editIndex, setEditIndex] = useState(null);
+const {
+    users,
+    setUsers,
+    editUser,
+    setEditUser,
+  } = useContext(UserContext);
+
   const {
     register,
     handleSubmit,
@@ -69,9 +74,27 @@ const [editIndex, setEditIndex] = useState(null);
     mode: "onChange", // real-time validation
   });
 
+    /* -------------------- AUTO FILL WHEN EDIT -------------------- */
+  useEffect(() => {
+    if (editUser) {
+      reset({
+        fullName: editUser.name,
+        username: editUser.username,
+        email: editUser.email,
+        phone: editUser.phone,
+        website: editUser.website,
+        street: editUser.address?.street,
+        suite: editUser.address?.suite,
+        city: editUser.address?.city,
+        zip: editUser.address?.zipcode,
+        company: editUser.company?.name,
+      });
+    }
+  }, [editUser, reset]);
+
   const onSubmit = (data) => {
   const newData = {
-    id: users.length + 1,
+    id: editUser ? editUser.id : Date.now(),
     name: data.name,
     username: data.username,
     email: data.email,
@@ -93,49 +116,22 @@ const [editIndex, setEditIndex] = useState(null);
       bs: data.bs,
     },
   };
-  if (editIndex !== null) {
-    // UPDATE
-    const updated = [...users];
-    updated[editIndex] = newData;
-    setUsers(updated);
-    setEditIndex(null);
-  } else {
-    // CREATE
-    setUsers((prev) => [...prev, newData]);
-    console.log(newData)
-  }
 
   
-  reset();
-};
+  if (editUser) {
+      // UPDATE
+      const updated = users.map((u) =>
+        u.id === editUser.id ? newData : u
+      );
+      setUsers(updated);
+      setEditUser(null);
+    } else {
+      // CREATE
+      setUsers((prev) => [...prev, newData]);
+    }
 
-// edit 
-const handleEdit = (index) => {
-  const user = user[index];
-
-  reset({
-    name: user.name,
-    username: user.username,
-    email: user.email,
-    phone: user.phone,
-    website: user.website,
-
-    street: user.address.street,
-    suite: user.address.suite,
-    city: user.address.city,
-    zipcode: user.address.zipcode,
-
-    lat: user.address.geo.lat,
-    lng: user.address.geo.lng,
-
-    companyName: user.company.name,
-    catchPhrase: user.company.catchPhrase,
-    bs: user.company.bs,
-  });
-
-  setEditIndex(index);
-};
-
+    reset();
+  };
 
 
   return (
@@ -252,7 +248,7 @@ const handleEdit = (index) => {
               type="submit"
               className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              Save User
+              {editUser ? "Update" : "Save User"}
             </button>
 
             <button
