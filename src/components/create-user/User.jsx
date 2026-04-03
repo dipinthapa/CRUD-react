@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/globalcontext";
 
 
@@ -57,10 +57,25 @@ const SectionLabel = ({ children }) => (
 /* -------------------- MAIN COMPONENT -------------------- */
 export default function User() {
 
+  const [message, setMessage] = useState("");
+
+
+useEffect(() => {
+  if (message) {
+    const timer = setTimeout(() => {
+      setMessage("");
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }
+}, [message]);
+
 const {
     users,
     setUsers,
     editUser,
+    handleUpdate,
+    handleCreate,
     setEditUser,
   } = useContext(UserContext);
 
@@ -95,14 +110,14 @@ const {
   const onSubmit = (data) => {
   const newData = {
     id: editUser ? editUser.id : Date.now(),
-    name: data.name,
+    name: data.fullName,
     username: data.username,
     email: data.email,
     address: {
       street: data.street,
       suite: data.suite,
       city: data.city,
-      zipcode: data.zipcode,
+      zipcode: data.zip,
       geo: {
         lat: data.lat,
         lng: data.lng,
@@ -111,7 +126,7 @@ const {
     phone: data.phone,
     website: data.website,
     company: {
-      name: data.companyName,
+      name: data.company,
       catchPhrase: data.catchPhrase,
       bs: data.bs,
     },
@@ -119,16 +134,12 @@ const {
 
   
   if (editUser) {
-      // UPDATE
-      const updated = users.map((u) =>
-        u.id === editUser.id ? newData : u
-      );
-      setUsers(updated);
-      setEditUser(null);
-    } else {
-      // CREATE
-      setUsers((prev) => [...prev, newData]);
-    }
+    handleUpdate(newData); 
+    setMessage("User updated successfully");  
+  } else {
+    handleCreate(newData);
+    setMessage("User created successfully");
+  }
 
     reset();
   };
@@ -140,8 +151,11 @@ const {
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 w-full max-w-xl">
         <h1 className="text-2xl font-bold text-gray-900 mb-6">
-          Create User
+          {editUser ? "Edit User" : "Create User"}
         </h1>
+        {message && (
+    <p className="mb-4 text-green-600">{message}</p>
+  )}
 
         {/* FORM */}
         <form onSubmit={handleSubmit(onSubmit)}>
