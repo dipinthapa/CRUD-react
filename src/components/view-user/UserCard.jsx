@@ -20,7 +20,7 @@ export default function UserCard({user, onDelete, onEdit, navigate}) {
           {/* Header */}
           <div className="flex items-center gap-3 mb-5">
             <div className="w-12 h-12 rounded-full bg-[linear-gradient(45deg,#685EFF,#AA48FF)] flex items-center justify-center font-semibold text-white text-lg shrink-0">
-              {user.id}
+              {user?.name[0]}
             </div>
             <div>
               <p className="text-sm font-semibold text-gray-900">
