@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context/globalcontext";
+import InputField from "./InputField";
 
 
 /* -------------------- ZOD SCHEMA -------------------- */
@@ -30,24 +31,6 @@ const schema = z.object({
   company: z.string().optional(),
 });
 
-/* -------------------- INPUT COMPONENT -------------------- */
-const InputField = ({ placeholder, name, register, error, type = 'text' }) => (
-  <div>
-    <input
-    type={type}
-      {...register(name)}
-      placeholder={placeholder}
-      className={`w-full px-4 py-2.5 rounded-lg border text-sm transition-all duration-150 focus:outline-none focus:ring-2 ${
-        error
-          ? "border-red-500 focus:ring-red-500"
-          : "border-gray-200 focus:ring-indigo-500"
-      }`}
-    />
-    {error && (
-      <p className="text-xs text-red-500 mt-1">{error.message}</p>
-    )}
-  </div>
-);
 
 /* -------------------- LABEL -------------------- */
 const SectionLabel = ({ children }) => (
@@ -71,12 +54,9 @@ useEffect(() => {
 }, [message]);
 
 const {
-    users,
-    setUsers,
     editUser,
     handleUpdate,
     handleCreate,
-    setEditUser,
   } = useContext(UserContext);
 
   const {
